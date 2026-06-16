@@ -1,0 +1,16 @@
+{
+  "name": "zafirus-plugins",
+  "owner": {
+    "name": "Miguel Alvarez",
+    "email": "malvarez@zafirus.tech"
+  },
+  "plugins": [
+    {
+      "name": "business-logic-toolkit",
+      "source": "./",
+      "description": "Extrae y verifica la lógica de negocio de una app ya desarrollada, con trazabilidad al código fuente.",
+      "version": "0.1.0",
+      "category": "documentation"
+    }
+  ]
+}

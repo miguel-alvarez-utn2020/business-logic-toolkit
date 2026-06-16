@@ -1,0 +1,18 @@
+{
+  "name": "business-logic-toolkit",
+  "version": "0.1.0",
+  "description": "Extrae y verifica la lógica de negocio de una app ya desarrollada (entidades, reglas de negocio, flujos de usuario e integraciones) con trazabilidad al código fuente. Incluye 2 skills, 2 subagentes y 2 comandos.",
+  "author": {
+    "name": "Miguel Alvarez",
+    "email": "malvarez@zafirus.tech"
+  },
+  "keywords": [
+    "business-logic",
+    "reverse-engineering",
+    "documentation",
+    "audit",
+    "angular",
+    "nestjs"
+  ],
+  "license": "MIT"
+}
