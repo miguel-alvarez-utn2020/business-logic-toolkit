@@ -1,8 +1,8 @@
 {
-  "name": "zafirus-plugins",
+  "name": "dev-toolkit-plugins",
   "owner": {
     "name": "Miguel Alvarez",
-    "email": "malvarez@zafirus.tech"
+    "email": "migueAlvarez48@gmail.com"
   },
   "plugins": [
     {

@@ -36,14 +36,14 @@ El resultado se guarda en `docs/` del proyecto analizado. Luego podés auditarlo
 
 ```
 /plugin marketplace add <git-url-de-este-repo>
-/plugin install business-logic-toolkit@zafirus-plugins
+/plugin install business-logic-toolkit@dev-toolkit-plugins
 ```
 
 ### Local (desarrollo)
 
 ```
 /plugin marketplace add /ruta/a/business-logic-toolkit
-/plugin install business-logic-toolkit@zafirus-plugins
+/plugin install business-logic-toolkit@dev-toolkit-plugins
 ```
 
 Verificá con `/plugin` que aparezca instalado y reiniciá la sesión si los comandos no figuran todavía.
