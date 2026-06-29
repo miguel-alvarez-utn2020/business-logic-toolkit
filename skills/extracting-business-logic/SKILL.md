@@ -15,8 +15,11 @@ allowed-tools: Read, Grep, Glob
 Do NOT interpret business logic yet. This phase only inventories what
 exists, to define the "denominator" the extraction must cover.
 
-1. Detect the stack and select the catalog.
+1. Detect the stack and select the catalog. Evaluá en orden; elegí el PRIMERO
+   que matchee:
    - `angular.json` + `nest-cli.json` → references/catalog-angular-nest.md
+   - `angular.json` sin `nest-cli.json` → references/catalog-angular.md
+     (Angular frontend puro: entidades como interfaces/models, sin backend)
    - (other stacks → their own catalog file, when added)
    - If no catalog matches the detected stack, STOP and tell the user which
      stack was detected and that a catalog for it must be added. Do NOT

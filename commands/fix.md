@@ -22,12 +22,13 @@ Flujo obligatorio (detallado en la skill `intake-fix`):
    qué esperaba), de a poco y en opción múltiple cuando se pueda. La localización
    técnica la resolvés vos contra el código. Mostrá el checklist de claridad y el
    % después de cada respuesta.
-3. Al llegar al umbral "listo" (~85%), PARÁ de preguntar solo. Presentá el borrador
-   del Fix-Brief y ofrecé: proceder | afinar a 95%+. Recomendá si afinar vale la
-   pena según el riesgo del bug.
-4. Producí el Fix-Brief final y pedí confirmación explícita del usuario.
-5. Solo tras la confirmación, delegá en el subagente `fix-dev` pasándole el
-   Fix-Brief. Mostrá el cambio propuesto (diff/preview). NO encadenes verificación
+3. Al llegar al umbral "listo" (~85%), PARÁ de preguntar solo. Presentá el
+   Fix-Brief COMPLETO y ofrecé UNA sola decisión: proceder (confirmar y aplicar) |
+   afinar a 95%+. Recomendá si afinar vale la pena según el riesgo. "Proceder" ES
+   la confirmación — no vuelvas a pedir confirmación aparte.
+4. Solo tras "proceder", delegá en el subagente `fix-dev` pasándole el Fix-Brief.
+   Mostrá el cambio aplicado (diff/preview) y decile al usuario DÓNDE verificar
+   (avisá si la pantalla real difiere de la que reportó). NO encadenes verificación
    automática en esta versión.
 
 Guardá el Fix-Brief en `docs/fixes/` (es un entregable trazable del proyecto).

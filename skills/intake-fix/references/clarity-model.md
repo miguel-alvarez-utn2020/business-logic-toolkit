@@ -16,7 +16,7 @@ gate honesto y escalable a otros flujos (`/feature`, `/refactor`).
 | # | Dimensión              | Resuelve | Peso | Resuelta cuando... |
 |---|------------------------|----------|------|--------------------|
 | 1 | Esperado vs actual     | Humano   | 22   | Está claro qué hace hoy y qué debería hacer. |
-| 2 | Localización           | Agente   | 22   | Hay un `source` candidato (archivo→función) con confianza, mapeado a una BR/flujo del doc cuando aplica. |
+| 2 | Localización (en código) | Agente | 22   | Hay un `source` (archivo→función) con confianza ALTA que **reproduce el síntoma reportado**, mapeado a una BR/flujo cuando aplica. Se puntúa por confianza del CÓDIGO, NO por si coincide con la pantalla que nombró el humano (ver nota abajo). |
 | 3 | Reproducción           | Humano   | 18   | Se sabe cómo disparar el bug: dónde, con qué pasos, si es siempre o intermitente. |
 | 4 | Criterio de aceptación | Humano   | 18   | Está definido cómo sabremos que quedó arreglado (observable). |
 | 5 | Restricciones          | Ambos    | 10   | Está claro qué NO debe cambiar / qué no romper. |
@@ -62,9 +62,17 @@ Leyenda: ✅ resuelta · 🟡 parcial · ⬜ sin resolver.
 
 Adaptá la redacción al bug concreto; estas son guías. Preferí opción múltiple.
 
+### Apertura (agnóstica del área — solo si no hay síntoma inicial claro)
+- "¿En qué parte de la app viste el problema?" — opciones = áreas/flujos del
+  documento de negocio (envíos, devoluciones, coordinación, usuarios/roles,
+  login…) + "Otra". NO asumas el área; dejá que el usuario la elija.
+- Recién con esa respuesta pasás a las preguntas de comportamiento.
+
 ### Comportamiento (Dim. 1 — Esperado vs actual)
 - "¿Qué hace la app hoy cuando ocurre el problema?" (opciones según síntoma)
 - "¿Qué debería hacer en cambio?"
+- Si hay un mensaje de error visible: "¿Qué dice el mensaje, textual?" — capturalo
+  temprano: el texto del error suele ubicar el defecto mejor que la pantalla.
 
 ### Reproducción (Dim. 3)
 - "¿Dónde lo viste?" (pantalla / sección — ofrecé las del doc de flujos)
@@ -85,10 +93,63 @@ Adaptá la redacción al bug concreto; estas son guías. Preferí opción múlti
 ## Localización (Dim. 2 — la resuelve el agente, no se pregunta)
 
 Para subir esta dimensión:
-1. Tomá el síntoma + la pantalla/flujo que dio el humano.
+1. Tomá el síntoma observable (sobre todo el **mensaje de error textual**, que es
+   más diagnóstico que la pantalla) + el área que dio el humano como INDICIO.
 2. Cruzá con el doc de lógica de negocio: ¿qué `BR-id` / flujo corresponde?
-3. Seguí el `source` de esa regla y/o buscá en el código (Grep/Glob/Read) la
-   función responsable.
-4. Marcala "resuelta" solo si tenés un candidato con confianza alta; "parcial"
-   si tenés la zona pero no la línea; 0 si no encontraste nada (decilo, no
-   inventes).
+3. Seguí el `source` de esa regla y/o buscá en el código (Grep/Glob/Read) el
+   defecto que **reproduce el síntoma**.
+4. Puntuá por confianza del CÓDIGO (sujeto al gate de reproducción de abajo):
+   - **resuelta (22)**: encontraste un defecto verificable que reproduce el
+     síntoma reportado **bajo los hechos que el usuario afirmó**, con
+     archivo→función concretos.
+   - **parcial (11)**: tenés la zona pero no la línea/causa exacta, hay más de un
+     candidato sin discriminar, o el candidato solo reproduce el síntoma si se
+     asume algo que el usuario NO confirmó.
+   - **0**: no encontraste nada (decilo, no inventes).
+
+### Gate de reproducción (OBLIGATORIO antes de marcar resuelta)
+Antes de puntuar Localización como "resuelta", verificá explícitamente:
+**¿este defecto reproduce el síntoma reportado USANDO SOLO los hechos que el
+usuario afirmó?**
+
+- **Sí** → resuelta (22). Avanzá.
+- **Solo si asumo un hecho extra que el usuario no dijo** → NO está resuelta
+  (máx. parcial). NO inventes ese hecho para que calce.
+- **Requiere asumir algo que CONTRADICE una respuesta del usuario** → STOP. Es
+  una contradicción, no una localización (ver abajo).
+
+**Chequeo de contradicción.** Si los hechos que afirmó el usuario son incompatibles
+con lo que hace el código candidato (ej.: el usuario dice "el nombre termina en
+.pdf y lo rechaza", pero el código ACEPTA todo lo que termina en .pdf), entonces
+ese código NO explica el síntoma. NO lo "arregles" igual basándote en una hipótesis
+alternativa (ej. "los archivos vienen sin extensión") que el usuario no afirmó o
+que contradice lo que dijo. En cambio:
+1. Surfacéale la contradicción al usuario en lenguaje claro.
+2. Pedile el dato que la resuelve (re-confirmar el síntoma / un ejemplo concreto),
+   o reconocé que no podés localizar el defecto con lo que hay.
+3. Localización queda **parcial/0**. NO procedas a un fix a ciegas: un cambio que
+   por tu propio análisis no resuelve lo reportado NO es un fix.
+
+Hallazgo lateral legítimo: si de paso descubrís una fragilidad real distinta del
+síntoma reportado, anotala como **observación / posible `/fix` aparte** — pero NO
+la presentes como "el arreglo de lo que reportaste" si no reproduce el síntoma.
+
+### Área reportada ≠ localización en código (regla clave)
+El área/pantalla que nombró el humano es un **indicio falible**, NO parte del
+score. Es normal y esperable que un reporte no técnico atribuya mal la pantalla
+mientras describe bien el síntoma.
+
+- Si encontrás **un defecto certero y verificable que reproduce el síntoma
+  central**, la Localización es **resuelta (22)** AUNQUE el defecto NO esté en la
+  pantalla que nombró el humano. El mismatch de pantalla es una **observación**
+  que se anota en el Fix-Brief, no un motivo para bajar el score ni para quedarse
+  trabado.
+- **Regla de convergencia (anti-loop):** cuando un único defecto de alta
+  confianza explica el síntoma central, **re-preguntá la pantalla UNA sola vez**
+  como máximo. Si el humano insiste en su pantalla, NO sigas investigándola en
+  círculos ni inventes un defecto que el código no tiene. Presentá:
+  *"El defecto real que reproduce lo que viste está en X; la pantalla que nombraste
+  (Y) no tiene este defecto, pero X explica el síntoma. Procedemos con X."* y
+  avanzá al gate.
+- Si NO hay ningún defecto que reproduzca el síntoma en NINGÚN lado, ahí sí
+  Localización queda parcial/0 y lo decís con honestidad (no fabriques una causa).

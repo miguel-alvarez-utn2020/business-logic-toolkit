@@ -37,4 +37,7 @@ el brief pide, no reinterpretarlo ni ampliarlo.
 - El diff/preview del cambio aplicado.
 - Una explicación corta de cómo el cambio satisface cada punto del criterio de
   aceptación.
+- **Dónde verificarlo:** la pantalla/flujo real desde donde se ejercita el código
+  que tocaste, con los pasos observables. Si ese punto difiere del área que figura
+  en el Fix-Brief como reportada, decilo explícito.
 - Cualquier supuesto que tuviste que hacer y los riesgos de regresión que veas.

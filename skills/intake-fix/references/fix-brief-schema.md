@@ -39,6 +39,12 @@ Qué debería hacer en cambio.
 ## Restricciones (no romper)
 - Flujo / comportamiento que debe seguir funcionando igual.
 
+## Cómo verificar
+- Pantalla/flujo real desde donde se ejercita el código tocado, y los pasos
+  observables para confirmar que quedó arreglado.
+- Si esa pantalla DIFIERE del área que reportó el usuario (mismatch), decilo
+  explícito aquí: "verificar en <pantalla real>, NO en <pantalla reportada>".
+
 ## Fuera de scope
 - Lo que explícitamente NO se toca en este fix.
 
