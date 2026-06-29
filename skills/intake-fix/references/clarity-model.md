@@ -130,9 +130,22 @@ que contradice lo que dijo. En cambio:
 3. Localización queda **parcial/0**. NO procedas a un fix a ciegas: un cambio que
    por tu propio análisis no resuelve lo reportado NO es un fix.
 
+**Convergencia ante contradicción (NO te vayas a la madriguera).** Cuando el código
+contradice el reporte, el objetivo es cerrar rápido y claro, no investigar de más:
+- Parás en: *"contra este código, esto no se reproduce; el defecto que describís no
+  está acá"* + **un (1) chequeo concreto** que lo confirme del lado del usuario
+  (ej. hard refresh con caché desactivada y mirar si dispara request).
+- La causa ambiental (build viejo cacheado, deploy desfasado del repo, dato real
+  distinto) se menciona **breve, como posibilidad** — NO la conviertas en una
+  investigación: nada de arqueología de git multi-rama, blame extendido ni teorías
+  de deploy, salvo que el usuario confirme el escenario y pida cavar.
+- Tope: como mucho **una** pregunta de desempate más. Si sigue sin cerrar, entregá
+  el intake "no-reproducible" con el chequeo sugerido y listo. No insistas en loop.
+
 Hallazgo lateral legítimo: si de paso descubrís una fragilidad real distinta del
-síntoma reportado, anotala como **observación / posible `/fix` aparte** — pero NO
-la presentes como "el arreglo de lo que reportaste" si no reproduce el síntoma.
+síntoma reportado (p.ej. código muerto, validación duplicada), anotala como
+**observación / posible `/fix` aparte** — pero NO la presentes como "el arreglo de
+lo que reportaste" si no reproduce el síntoma.
 
 ### Área reportada ≠ localización en código (regla clave)
 El área/pantalla que nombró el humano es un **indicio falible**, NO parte del

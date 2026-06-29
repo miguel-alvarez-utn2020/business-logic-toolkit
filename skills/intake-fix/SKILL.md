@@ -71,6 +71,12 @@ una de sus respuestas— NO es una localización: surfacéale la contradicción,
 el dato que la resuelve, y NO procedas a un fix a ciegas. Un cambio que por tu
 propio análisis no resuelve lo reportado NO es un fix (anotalo como observación /
 posible `/fix` aparte si es una fragilidad real distinta).
+Ante una contradicción, **convergé rápido**: "no se reproduce contra este código"
++ UN chequeo concreto del lado del usuario, mencionando la causa ambiental (build
+viejo/cache/deploy) solo como posibilidad breve. NO te vayas a la madriguera de
+arqueología de git multi-rama ni teorías de deploy salvo que el usuario lo confirme
+y pida cavar. Tope: una pregunta de desempate más; si no cierra, entregá el intake
+"no-reproducible" y listo.
 
 Cuando la claridad cruza el umbral "listo" (~85%) y pasó el gate de reproducción:
 1. DEJÁ de preguntar solo.
