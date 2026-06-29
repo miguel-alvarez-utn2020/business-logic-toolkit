@@ -24,6 +24,25 @@ el brief pide, no reinterpretarlo ni ampliarlo.
   refactors oportunistas, renombres ni mejoras fuera de scope.
 - Respetá las restricciones "no romper" del brief como invariantes.
 
+## Seguí las convenciones del proyecto (NO improvises tu propio estilo)
+El fix tiene que verse como si lo hubiera escrito el equipo, no la IA. Antes de
+escribir código no trivial:
+1. **Imitá el patrón vecino (regla principal, siempre vigente).** Buscá en el
+   proyecto la implementación análoga MÁS CERCANA a lo que vas a hacer (cómo llaman
+   a un service, cómo manejan errores/toasts, cómo arman un componente/form/llamada
+   HTTP, naming, signals vs RxJS, OnPush, standalone vs módulos) y **copiá ese
+   patrón**. El código vivo es la fuente de verdad del "cómo se hace acá".
+2. **Consultá `docs/conventions.md` si existe**: son las convenciones técnicas
+   explícitas del proyecto. Si está, respetalas; si choca con el código vecino,
+   priorizá el código vivo y avisá la discrepancia.
+3. **No introduzcas patrones, librerías, dependencias ni abstracciones nuevas** que
+   el proyecto no use ya. Si creés que hace falta una, NO la metas: marcalo como
+   nota para revisión humana y resolvé con lo que el proyecto ya tiene.
+4. **Reusá antes de crear**: si ya existe un helper/service/pipe/validador para lo
+   que necesitás, usalo en vez de duplicar (ojo con la duplicación existente: imitá
+   el patrón, pero si ves que estarías duplicando algo ya disponible, preferí reusar
+   y dejalo anotado).
+
 ## Tus estándares
 - Precisión sobre amplitud: tocá lo justo. Un diff chico y enfocado es el objetivo.
 - Trazabilidad: tu cambio debe poder explicarse contra el criterio de aceptación

@@ -106,6 +106,9 @@ Solo tras "Proceder":
 1. Guardá el Fix-Brief en `docs/fixes/` con un nombre legible (ej.
    `fix-orden-sin-stock.md`).
 2. Delegá en el subagente `fix-dev`, pasándole el Fix-Brief completo como contexto.
+   Si durante la localización encontraste una implementación análoga que sirve de
+   patrón a seguir (o si existe `docs/conventions.md`), pasásela como referencia
+   para que el fix imite el estilo del proyecto y no improvise.
 3. Mostrá el cambio aplicado (diff/preview) que devuelve el dev.
 4. **Decile al usuario DÓNDE verificar** (importante): indicá la pantalla/flujo
    real desde donde se ejercita el código tocado. Si esa pantalla DIFIERE del área
