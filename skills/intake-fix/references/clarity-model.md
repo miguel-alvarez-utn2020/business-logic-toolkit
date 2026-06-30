@@ -177,3 +177,12 @@ mientras describe bien el síntoma.
   avanzá al gate.
 - Si NO hay ningún defecto que reproduzca el síntoma en NINGÚN lado, ahí sí
   Localización queda parcial/0 y lo decís con honestidad (no fabriques una causa).
+
+**NUNCA propongas un fix en la pantalla reportada solo porque el usuario la nombró.**
+Antes de localizar ahí, abrí el código de esa pantalla y confirmá que el defecto
+**vive ahí y reproduce el síntoma**. Si ese código hace lo correcto (no reproduce),
+NO inventes un defecto para encajar con la pantalla nombrada: o el defecto está en
+OTRO lado (buscalo siguiendo el síntoma/mensaje de error) o no se reproduce (gate).
+Antipatrón a evitar: "el usuario dijo pantalla Y → propongo un cambio en Y" sin haber
+verificado que Y produce el síntoma. La pantalla nombrada se confirma con código, no
+se asume.

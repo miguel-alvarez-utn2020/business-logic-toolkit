@@ -25,7 +25,10 @@
       declara su `source` (BR-01 → auth.guard; BR-04 → module.guard ROUTE_REQUIRED_PERMISSIONS;
       BR-19 → tablero anti-spam; BR-27 → file-upload validateFile). Confirmá leyendo cada archivo.
 - [ ] No hay reglas inventadas que el código no tenga (sin alucinaciones) en el sample.
-- [ ] Coverage report presente con % y gaps explícitos.
+
+> NOTA: el coverage report es un self-check del MOMENTO de extracción (la skill lo
+> "appendea" a su salida), NO un artefacto que tenga que estar persistido en
+> `docs/business-logic.xml`. No lo exijas como criterio sobre el archivo guardado.
 
 ## Runs / umbral
 - 2 corridas (la extracción es más determinista). **2/2** objetivos; las 4 reglas
