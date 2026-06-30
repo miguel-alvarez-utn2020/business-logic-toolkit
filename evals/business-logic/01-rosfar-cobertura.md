@@ -20,12 +20,13 @@
 - [ ] Detecta entidades clave: user, role, shipping, return, medication-request,
       pdf-staging-row, notification.
 
-### De juicio (usar el verificador `validate-business-logic` como juez)
-- [ ] Las reglas marcadas existen en el código declarado (sample: BR-01 auth guard,
-      BR-04 permisos por ruta, BR-19 anti-spam, BR-27 validación de archivo).
-- [ ] No inventa reglas que el código no tiene (sin alucinaciones).
+### De juicio (spot-check directo, read-only — NO requiere orquestar otra tool)
+- [ ] Verificá vos mismo leyendo el código: las 4 reglas sample existen donde el doc
+      declara su `source` (BR-01 → auth.guard; BR-04 → module.guard ROUTE_REQUIRED_PERMISSIONS;
+      BR-19 → tablero anti-spam; BR-27 → file-upload validateFile). Confirmá leyendo cada archivo.
+- [ ] No hay reglas inventadas que el código no tenga (sin alucinaciones) en el sample.
 - [ ] Coverage report presente con % y gaps explícitos.
 
 ## Runs / umbral
-- 2 corridas (la extracción es más determinista). **2/2** objetivos; verificador sin
-  reglas "no encontradas" en el sample.
+- 2 corridas (la extracción es más determinista). **2/2** objetivos; las 4 reglas
+  sample confirmadas en el código.

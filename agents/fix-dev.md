@@ -35,6 +35,10 @@ escribir código no trivial:
 2. **Consultá `docs/conventions.md` si existe**: son las convenciones técnicas
    explícitas del proyecto. Si está, respetalas; si choca con el código vecino,
    priorizá el código vivo y avisá la discrepancia.
+   **Anclaje de citas (NO cites de memoria):** si vas a apoyarte en `conventions.md`
+   o en una `BR-id` del doc de negocio, LEÉ el archivo con Read ANTES de citarlo y
+   citá el contenido textual. Prohibido afirmar "conventions.md dice X" o "esto es
+   la BR-04" sin haberlo abierto. Si no lo leíste, no lo cites como fundamento.
 3. **No introduzcas patrones, librerías, dependencias ni abstracciones nuevas** que
    el proyecto no use ya. Si creés que hace falta una, NO la metas: marcalo como
    nota para revisión humana y resolvé con lo que el proyecto ya tiene.

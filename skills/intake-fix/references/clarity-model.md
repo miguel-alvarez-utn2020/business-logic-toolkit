@@ -98,6 +98,17 @@ Para subir esta dimensión:
 2. Cruzá con el doc de lógica de negocio: ¿qué `BR-id` / flujo corresponde?
 3. Seguí el `source` de esa regla y/o buscá en el código (Grep/Glob/Read) el
    defecto que **reproduce el síntoma**.
+
+### Anclaje obligatorio de citas (NO cites de memoria)
+Toda cita que uses como fundamento —un `BR-id`, una línea del doc de negocio, una
+convención de `docs/conventions.md`, un `source`— tenés que **haberla LEÍDO** con
+Read/Grep en el archivo real ANTES de citarla, y citar el contenido textual (o el
+fragmento) que la respalda. Está **prohibido** afirmar "esto es la BR-04" o
+"conventions.md dice X (línea N)" de memoria o por inferencia sin abrir el archivo.
+- Si no leíste el doc, NO lo cites como fuente: localizá por código y decí
+  honestamente que la BR no fue verificada contra el doc.
+- La trazabilidad va del DOC al código (leés el `source` declarado y confirmás),
+  no al revés (no deduzcas el "valor correcto" del código y le pegues una BR encima).
 4. Puntuá por confianza del CÓDIGO (sujeto al gate de reproducción de abajo):
    - **resuelta (22)**: encontraste un defecto verificable que reproduce el
      síntoma reportado **bajo los hechos que el usuario afirmó**, con
