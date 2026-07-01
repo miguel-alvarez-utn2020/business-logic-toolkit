@@ -79,6 +79,12 @@ business-logic-toolkit/
         └── SKILL.md
 ```
 
+## Proyectos relacionados
+
+| Repo | Qué es |
+|------|--------|
+| [MCP-PAINT](https://github.com/miguel-alvarez-utn2020/MCP-PAINT) | MCP local que controla Paint de Windows via pyautogui — ejemplo práctico de cómo construir un servidor MCP desde cero con Python + FastMCP, incluyendo auto-calibración por visión artificial (OpenCV) y reproducción de bocetos. |
+
 ## Licencia
 
 MIT
