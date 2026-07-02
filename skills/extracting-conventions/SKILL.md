@@ -18,8 +18,11 @@ proyecto hace, cruzado con lo oficial.
 
 1. Detectá el stack y la **versión exacta** (leé `package.json`, `angular.json`,
    etc.). La versión es crítica: las convenciones de Angular 14 ≠ Angular 18.
-2. Seleccioná el catálogo de detección: `angular.json` → references/catalog-angular.md.
-   Si no hay catálogo para el stack detectado, PARÁ y avisá (no adivines).
+2. Seleccioná el catálogo de detección (elegí el primero que matchee):
+   - `angular.json` → references/catalog-angular.md
+   - `package.json` con `react-native` o `expo` → references/catalog-react-native.md
+   Si no hay catálogo para el stack detectado, PARÁ y avisá (no adivines). NO
+   improvises un catálogo ni lo escribas en disco: pedí que se agregue al toolkit.
 3. Por cada categoría del catálogo, listá archivos representativos a muestrear
    (no todos: una muestra suficiente para ver el patrón dominante).
 
