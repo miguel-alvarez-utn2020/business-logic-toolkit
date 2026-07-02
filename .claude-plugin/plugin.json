@@ -17,7 +17,9 @@
     "code-style",
     "qa",
     "angular",
-    "nestjs"
+    "nestjs",
+    "react-native",
+    "expo"
   ],
   "license": "MIT"
 }

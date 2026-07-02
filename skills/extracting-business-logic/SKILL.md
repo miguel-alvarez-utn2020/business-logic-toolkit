@@ -20,6 +20,8 @@ exists, to define the "denominator" the extraction must cover.
    - `angular.json` + `nest-cli.json` → references/catalog-angular-nest.md
    - `angular.json` sin `nest-cli.json` → references/catalog-angular.md
      (Angular frontend puro: entidades como interfaces/models, sin backend)
+   - `package.json` con `react-native` o `expo` (sin `angular.json`) →
+     references/catalog-react-native.md (app móvil React Native / Expo)
    - (other stacks → their own catalog file, when added)
    - If no catalog matches the detected stack, STOP and tell the user which
      stack was detected and that a catalog for it must be added. Do NOT
