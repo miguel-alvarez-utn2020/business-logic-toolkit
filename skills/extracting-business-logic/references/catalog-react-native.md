@@ -35,7 +35,11 @@ Las reglas de un frontend RN viven sobre todo en:
 - **custom hooks** (`use*.ts`) — orquestación, gating condicional, estado derivado.
 - **slices/stores** (Redux Toolkit `createSlice`, Zustand `create`) — reducers con
   lógica de dominio (no el set de estado plano).
-- **validación de forms** — schemas zod/yup con reglas de dominio.
+- **thunks async** (`createAsyncThunk`, action creators con `redux-thunk`) — la
+  orquestación y los gates condicionales de operaciones async suelen vivir acá.
+- **validación de forms** — schemas zod/yup con reglas de dominio, O, si el proyecto
+  NO usa una lib de validación, la validación manual en hooks/componentes (buscá
+  chequeos condicionales que bloqueen submit / marquen error).
 - **services / api layer** — lógica condicional antes/después de llamar al backend.
 Pueden citarse componentes/screens en el `source` cuando la regla vive ahí. Igual
 que siempre: solo constraints reales de dominio, no plumbing ni set de estado incondicional.
@@ -47,7 +51,7 @@ que siempre: solo constraints reales de dominio, no plumbing ni set de estado in
 | entities       | Glob   | `**/*.types.ts`, `**/types/**/*.ts`, `**/models/**/*.ts`, `**/*.model.ts` (candidatas — ver nota) |
 | entities       | Grep   | `z.object(`, `yup.object(` (schemas como entidades/validación) |
 | business-rules | Glob   | `**/hooks/**/*.ts`, `**/use*.ts`, `**/*.slice.ts`, `**/*.store.ts`, `**/*.schema.ts` |
-| business-rules | Grep   | `createSlice(`, `create(` (zustand), `useMutation(`, custom `ValidatorFn`/resolvers |
+| business-rules | Grep   | `createSlice(`, `createAsyncThunk(`, `create(` (zustand), `useMutation(`, resolvers de validación / chequeos manuales de form |
 | user-flows     | Grep   | React Navigation: `createNativeStackNavigator`, `createBottomTabNavigator`, `<Stack.Screen`, `@react-navigation` |
 | user-flows     | Glob   | `**/screens/**/*.tsx`, `**/*.screen.tsx`; Expo Router: `app/**/*.tsx` (rutas por archivo) |
 
@@ -55,8 +59,8 @@ que siempre: solo constraints reales de dominio, no plumbing ni set de estado in
 | Sección         | Método | Patrón |
 |-----------------|--------|--------|
 | roles           | Grep   | chequeos de rol/permiso en hooks/guards, `role`/`permission` en auth context, `casl` |
-| integrations    | Grep   | `axios`/`fetch`, `@tanstack/react-query`/`swr`, SDKs en package.json (firebase, `@supabase`, stripe, sentry, amplitude), push (`expo-notifications`, `@react-native-firebase/messaging`), módulos nativos |
-| realtime        | Grep   | `socket.io-client`, `new WebSocket`, `supabase.channel(`, SSE/`EventSource` |
+| integrations    | Grep   | `axios`/`fetch`, `@tanstack/react-query`/`swr`, SDKs en package.json (firebase, `@supabase`, stripe, sentry, amplitude), push (`expo-notifications`, `@react-native-firebase/messaging`), sesión/persistencia (`expo-secure-store`, `@react-native-async-storage`), device (`expo-camera`, `expo-image-picker`, `expo-av`, webview), módulos nativos |
+| realtime        | Grep   | `socket.io-client`, `new WebSocket`, `supabase.channel(`, Firebase (`onSnapshot(`, `.on('value'`, RTDB/Firestore listeners), SSE/`EventSource` |
 | state-machines  | Glob   | `**/*.machine.ts`, `xstate` en package.json |
 | domain-events   | Grep   | `EventEmitter`, `DeviceEventEmitter`, `**/*.event.ts` |
 
