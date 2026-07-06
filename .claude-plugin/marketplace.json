@@ -8,8 +8,8 @@
     {
       "name": "business-logic-toolkit",
       "source": "./",
-      "description": "Extrae y verifica la lógica de negocio de una app ya desarrollada, con trazabilidad al código fuente.",
-      "version": "0.1.0",
+      "description": "Extrae lógica de negocio y convenciones técnicas (Angular, React Native/Expo) con trazabilidad al código, y guía fixes de alta precisión con entrevista estructurada (/fix).",
+      "version": "0.2.0",
       "category": "documentation"
     }
   ]

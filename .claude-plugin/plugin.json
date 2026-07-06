@@ -1,6 +1,6 @@
 {
   "name": "business-logic-toolkit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Extrae y verifica la lógica de negocio de una app ya desarrollada (entidades, reglas, flujos, integraciones) con trazabilidad al código, extrae sus convenciones técnicas cruzadas con la guía oficial del framework, y guía fixes de alta precisión con una entrevista estructurada (/fix). Incluye 4 skills, 4 subagentes y 4 comandos.",
   "author": {
     "name": "Miguel Alvarez",
