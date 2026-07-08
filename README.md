@@ -1,83 +1,115 @@
 # business-logic-toolkit
 
-Plugin de [Claude Code](https://claude.com/claude-code) para **extraer y verificar la lógica de negocio** de una aplicación ya desarrollada: entidades, reglas de negocio, flujos de usuario e integraciones, con trazabilidad al código fuente.
+Plugin de [Claude Code](https://claude.com/claude-code) para **entender, documentar y mantener** apps ya desarrolladas — sin inventar nada: todo apunta al archivo y función donde vive.
 
-Pensado para documentar, mapear o auditar apps existentes (o preparar una propuesta de mejora sobre ellas) sin inventar nada: cada regla apunta al archivo y función donde vive.
+Hace tres cosas:
+1. **Extrae la lógica de negocio** — *qué hace* la app (entidades, reglas, flujos).
+2. **Extrae las convenciones técnicas** — *cómo está construida* (arquitectura, estado, estilos…), cruzadas con la guía oficial del framework.
+3. **Guía arreglos de bugs** (`/fix`) con una entrevista estructurada, pensada para que hasta alguien no técnico (ej. un QA) pueda dirigir un fix con precisión.
 
-## Qué incluye
+**Stacks soportados hoy:** Angular (+ NestJS), Angular frontend, y React Native / Expo. Para otro stack se agrega un "catálogo" de detección (ver más abajo).
+
+---
+
+## 📖 Guía de comandos (qué hace cada uno)
+
+### `/business-logic [carpeta] [xml|md]`
+**Qué hace:** analiza el código y extrae *qué hace la app* — entidades, reglas de negocio, flujos de usuario, roles e integraciones. Cada regla queda trazada a su `source` (archivo → función).
+**Cuándo usarlo:** al empezar a trabajar sobre una app que no conocés, para documentarla o antes de escalarla/arreglarla.
+**Produce:** `docs/business-logic.xml` (o `.md`).
+**Ejemplo:** `/business-logic .` (todo el proyecto) · `/business-logic src/app md` (una carpeta, en Markdown).
+**Cómo trabaja:** en 3 fases — *descubrimiento* (detecta el stack y muestra un manifiesto, **para y espera tu OK**) → *extracción* → *cobertura* (reporta qué cubrió y qué no).
+
+### `/validate-business-logic [ruta-doc]`
+**Qué hace:** audita un documento ya extraído contra el código real. Por cada regla confirma si existe donde dice.
+**Cuándo usarlo:** para verificar que el doc de lógica de negocio es fiel (o auditar uno viejo).
+**Produce:** un reporte con cada regla marcada **CONFIRMED** / **BAD_SOURCE** (existe pero el source apunta mal) / **NOT_FOUND**.
+**Ejemplo:** `/validate-business-logic docs/business-logic.xml`
+
+### `/conventions [carpeta]`
+**Qué hace:** extrae *cómo se construye* en este proyecto (arquitectura, estado, datos/API, componentes, forms, estilos, tooling) y lo **cruza con la guía oficial** del framework para la versión detectada, marcando el **delta** (alineado / desviación / sin patrón).
+**Cuándo usarlo:** para que cualquier cambio futuro siga el estilo del equipo, no el que improvise la IA. Es el insumo que hace que `/fix` respete las convenciones.
+**Produce:** `docs/conventions.md`.
+**Ejemplo:** `/conventions .`
+**Regla de uso (queda escrita en el doc):** para un cambio, seguí la convención del proyecto; donde no hay patrón, caé en lo oficial; las "desviaciones" son cómo está hoy — no las refactorices en un fix.
+
+### `/fix [descripción opcional del bug]`
+**Qué hace:** conduce una **entrevista guiada** para arreglar un bug. Te hace preguntas simples (de opción múltiple) sobre lo que *observaste*; la parte técnica (dónde está en el código) la resuelve solo. Va mostrando un **% de claridad**; al llegar al umbral arma un **Fix-Brief** (resumen preciso del arreglo) y, tras tu confirmación, delega la ejecución al subagente `fix-dev`.
+**Cuándo usarlo:** para arreglar bugs sin escribir un "prompt suelto" — con guía y alta precisión. Ideal para gente con poca experiencia técnica.
+**Produce:** un `docs/fixes/<nombre>.md` (el Fix-Brief) + el cambio aplicado.
+**Requisito:** conviene tener antes `docs/business-logic.xml` (le da contexto). Si no existe, `/fix` lo avisa.
+**Cómo cuida la calidad:** no aplica cambios "a ciegas" — si lo que reportás no se reproduce en el código, **frena** en vez de inventar un arreglo; y cita las reglas/convenciones **leyéndolas** del código, no de memoria.
+
+---
+
+## 🔷 Flujo recomendado (para un proyecto nuevo)
+
+```
+1. /business-logic .      → entender QUÉ hace la app        (docs/business-logic.xml)
+2. /conventions .         → entender CÓMO está construida   (docs/conventions.md)
+3. /fix                   → arreglar bugs con esos contextos ya cargados
+   /validate-business-logic docs/business-logic.xml  → auditar el doc cuando haga falta
+```
+
+Los pasos 1 y 2 se corren **una vez** por proyecto (quedan en `docs/`). Después `/fix` los usa como contexto.
+
+---
+
+## 🧩 Qué incluye
 
 | Tipo | Nombre | Para qué |
 |------|--------|----------|
-| Comando | `/business-logic [carpeta] [xml\|md]` | Extrae la lógica de negocio a un documento (XML por defecto). |
-| Comando | `/validate-business-logic [ruta-doc]` | Audita un documento extraído contra el código. |
-| Subagente | `business-analyst` | Hace la extracción (read-only, basado en evidencia). |
-| Subagente | `business-logic-verifier` | Audita cada regla: CONFIRMED / BAD_SOURCE / NOT_FOUND. |
-| Skill | `extracting-business-logic` | Procedimiento de extracción en 3 fases (descubrimiento → extracción → cobertura). |
-| Skill | `verify-business-logic` | Procedimiento de verificación regla por regla. |
+| Comando | `/business-logic` | Extrae la lógica de negocio. |
+| Comando | `/validate-business-logic` | Audita ese documento contra el código. |
+| Comando | `/conventions` | Extrae las convenciones técnicas + delta vs lo oficial. |
+| Comando | `/fix` | Entrevista guiada para arreglar un bug. |
+| Subagente | `business-analyst` | Hace la extracción de negocio (read-only, con evidencia). |
+| Subagente | `business-logic-verifier` | Audita regla por regla. |
+| Subagente | `conventions-analyst` | Extrae convenciones (read-only, consulta la guía oficial). |
+| Subagente | `fix-dev` | Aplica el fix ya especificado, con cambio mínimo y siguiendo las convenciones. |
 
-## Cómo funciona
-
-La extracción corre en 3 fases:
-
-1. **Descubrimiento** — detecta el stack, aplica conteos deterministas (Glob/Grep) y muestra un **manifiesto** (qué secciones se activan y qué quedó fuera). Se detiene a esperar tu confirmación.
-2. **Extracción** — completa el esquema canónico (XML) contra el manifiesto. Cada regla de negocio debe tener un `source` al código o no se incluye.
-3. **Cobertura** — compara lo esperado vs. lo extraído y reporta gaps.
-
-El resultado se guarda en `docs/` del proyecto analizado. Luego podés auditarlo con `/validate-business-logic`.
-
-> **Stacks soportados:** hoy hay catálogo de detección para **Angular + NestJS**
-> (`skills/extracting-business-logic/references/catalog-angular-nest.md`).
-> Para otros stacks, agregá un nuevo archivo de catálogo siguiendo ese formato;
-> si no hay catálogo, la skill se detiene en vez de adivinar patrones.
+---
 
 ## Instalación
 
-### Vía marketplace (git)
+Corré **una línea a la vez** (no las pegues juntas):
 
 ```
-/plugin marketplace add <git-url-de-este-repo>
+/plugin marketplace add https://github.com/miguel-alvarez-utn2020/business-logic-toolkit.git
+```
+```
 /plugin install business-logic-toolkit@dev-toolkit-plugins
 ```
 
-### Local (desarrollo)
+Reiniciá la sesión. Verificá con `/plugin` que aparezca **`business-logic-toolkit`** y anotá la **versión** (debe ser la última publicada).
 
+**¿Viene desactualizado?** El marketplace cachea. Forzá refresco:
 ```
-/plugin marketplace add /ruta/a/business-logic-toolkit
-/plugin install business-logic-toolkit@dev-toolkit-plugins
+/plugin marketplace update dev-toolkit-plugins
 ```
+Si aún así trae viejo, `remove` + `add` de nuevo (limpia la caché) y reiniciá.
 
-Verificá con `/plugin` que aparezca instalado y reiniciá la sesión si los comandos no figuran todavía.
+> Nota: `business-logic-toolkit` es el **plugin**; `dev-toolkit-plugins` es el **marketplace** (la parte después del `@`). Si lo agregaste hace mucho, tu marketplace local puede llamarse distinto — mirá `/plugin` y usá ese nombre en el `@`.
 
-## Uso
+---
 
-```
-/business-logic . xml          # extrae todo el proyecto a docs/business-logic.xml
-/business-logic src/app md     # extrae solo una carpeta, en Markdown
-/validate-business-logic docs/business-logic.xml
-```
+## Stacks y catálogos
 
-## Estructura del plugin
+La extracción es **agnóstica en su salida** (describe el negocio/convenciones, no la tecnología), pero la **detección** es por stack, vía "catálogos". Hoy hay:
 
-```
-business-logic-toolkit/
-├── .claude-plugin/
-│   ├── plugin.json
-│   └── marketplace.json
-├── commands/
-│   ├── business-logic.md
-│   └── validate-business-logic.md
-├── agents/
-│   ├── business-analyst.md
-│   └── business-logic-verifier.md
-└── skills/
-    ├── extracting-business-logic/
-    │   ├── SKILL.md
-    │   └── references/
-    │       ├── catalog-angular-nest.md
-    │       └── output-schema.md
-    └── verify-business-logic/
-        └── SKILL.md
-```
+- **Lógica de negocio:** Angular+NestJS, Angular frontend, React Native/Expo.
+- **Convenciones:** Angular, React Native/Expo.
+
+Para soportar otro stack (ej. React web, Vue), se agrega un archivo de catálogo siguiendo el formato existente. Si no hay catálogo para el stack detectado, la skill **se detiene** en vez de adivinar patrones.
+
+---
+
+## Para mantenedores
+
+- Al cambiar el comportamiento del plugin, **bumpeá la versión** en `.claude-plugin/plugin.json` y `.claude-plugin/marketplace.json` (ej. `0.2.0` → `0.2.1`) antes de pushear. Si la versión no cambia, las instalaciones tienden a servir la caché vieja.
+- `evals/` contiene el suite de regresión (escenarios + criterios). Correlo cuando toques un skill.
+
+---
 
 ## Proyectos relacionados
 
