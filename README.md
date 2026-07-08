@@ -10,10 +10,23 @@ Pensado para documentar, mapear o auditar apps existentes (o preparar una propue
 |------|--------|----------|
 | Comando | `/business-logic [carpeta] [xml\|md]` | Extrae la lógica de negocio a un documento (XML por defecto). |
 | Comando | `/validate-business-logic [ruta-doc]` | Audita un documento extraído contra el código. |
-| Subagente | `business-analyst` | Hace la extracción (read-only, basado en evidencia). |
+| Comando | `/conventions [carpeta]` | Extrae las convenciones técnicas cruzadas con la guía oficial del framework. |
+| Comando | `/fix` | Entrevista estructurada para arreglar un bug (gate de claridad); delega a `fix-dev`. |
+| Comando | `/baseline [--trace]` | Genera el baseline de specs vivas de OpenSpec desde `business-logic.xml`. |
+| Subagente | `business-analyst` | Extracción de lógica de negocio (read-only, basado en evidencia). |
 | Subagente | `business-logic-verifier` | Audita cada regla: CONFIRMED / BAD_SOURCE / NOT_FOUND. |
+| Subagente | `conventions-analyst` | Extrae convenciones técnicas + delta vs. guía oficial (read-only). |
+| Subagente | `fix-dev` | Aplica un fix desde un Fix-Brief confirmado. |
+| Subagente | `baseline-generator` | Genera specs vivas de OpenSpec desde el XML y las valida. |
 | Skill | `extracting-business-logic` | Procedimiento de extracción en 3 fases (descubrimiento → extracción → cobertura). |
 | Skill | `verify-business-logic` | Procedimiento de verificación regla por regla. |
+| Skill | `extracting-conventions` | Extracción de convenciones + catálogos por stack. |
+| Skill | `intake-fix` | Entrevista de fix con gate de claridad (Fix-Brief). |
+| Skill | `generating-baseline-specs` | Procedimiento del baseline de specs de OpenSpec. |
+
+> **Integración con OpenSpec** (`/baseline`): requiere el CLI de OpenSpec (`@fission-ai/openspec`)
+> instalado y el proyecto inicializado (`openspec/`). El baseline es downstream de `/business-logic`:
+> deriva las specs vivas desde `docs/business-logic.xml` ya verificado.
 
 ## Cómo funciona
 
@@ -65,18 +78,28 @@ business-logic-toolkit/
 │   └── marketplace.json
 ├── commands/
 │   ├── business-logic.md
-│   └── validate-business-logic.md
+│   ├── validate-business-logic.md
+│   ├── conventions.md
+│   ├── fix.md
+│   └── baseline.md
 ├── agents/
 │   ├── business-analyst.md
-│   └── business-logic-verifier.md
-└── skills/
-    ├── extracting-business-logic/
-    │   ├── SKILL.md
-    │   └── references/
-    │       ├── catalog-angular-nest.md
-    │       └── output-schema.md
-    └── verify-business-logic/
-        └── SKILL.md
+│   ├── business-logic-verifier.md
+│   ├── conventions-analyst.md
+│   ├── fix-dev.md
+│   └── baseline-generator.md
+├── skills/
+│   ├── extracting-business-logic/
+│   ├── verify-business-logic/
+│   ├── extracting-conventions/
+│   ├── intake-fix/
+│   └── generating-baseline-specs/
+└── evals/
+    ├── README.md
+    ├── business-logic/
+    ├── conventions/
+    ├── fix/
+    └── baseline/
 ```
 
 ## Proyectos relacionados

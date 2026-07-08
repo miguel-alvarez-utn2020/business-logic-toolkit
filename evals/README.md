@@ -32,8 +32,13 @@ evals/
 ├── README.md
 ├── fix/                 # escenarios de /fix (intake + fix-dev)
 ├── business-logic/      # extracción de lógica de negocio
-└── conventions/         # extracción de convenciones
+├── conventions/         # extracción de convenciones
+└── baseline/            # generación del baseline de specs OpenSpec (muta el repo → cleanup)
 ```
+
+> **Nota:** el eval de generación de `baseline/` **muta el repo** (escribe `openspec/specs/`), a
+> diferencia del resto que es read-only. Correrlo en worktree/rama descartable y limpiar al terminar.
+> La variante de discovery (Fase 1, solo el mapa de capabilities) sí es read-only.
 
 ## Formato de cada escenario
 Cada archivo `.md` define:
