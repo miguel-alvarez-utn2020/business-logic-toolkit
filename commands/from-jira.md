@@ -12,7 +12,11 @@ Parámetros recibidos: $ARGUMENTS
 
 Usá el skill `jira-intake` como motor del intake. Corre en el hilo principal
 (necesita las tools de Jira por MCP y AskUserQuestion) y hace:
-1. **Fetch** del issue por MCP.
+0. **Preflight de token de adjuntos (gate inteligente):** chequea si hay token scoped
+   para leer adjuntos. Si no, ofrece configurarlo (recomendado) o seguir solo-texto
+   (degradado). Con token, lee el contenido de los adjuntos (PDF/mockups) vía `jira-read`
+   — clave porque el spec suele estar en el diseño, no en el texto.
+1. **Fetch** del issue por MCP (+ adjuntos si hay token).
 2. **Mapeo** a un Change-Brief + **gate de readiness para SDD** (modelo en
    `references/sdd-readiness-model.md`): puntúa objetivo, alcance, criterios de
    aceptación, anclaje técnico y encaje con el dominio.

@@ -34,7 +34,8 @@ evals/
 ├── business-logic/      # extracción de lógica de negocio
 ├── conventions/         # extracción de convenciones
 ├── baseline/            # generación del baseline de specs OpenSpec (muta el repo → cleanup)
-└── from-jira/           # Jira → OpenSpec: readiness/gate (read-only) + change-author (smoke objetivo)
+├── from-jira/           # Jira → OpenSpec: readiness/gate (read-only) + change-author (smoke objetivo)
+└── jira-read/           # preflight de token de adjuntos (config-first, read-only)
 ```
 
 > **Nota:** los evals de generación que **mutan el repo** (escriben `openspec/`) son `baseline/`

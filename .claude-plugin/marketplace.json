@@ -8,7 +8,7 @@
     {
       "name": "business-logic-toolkit",
       "source": "./",
-      "description": "Extrae lógica de negocio y convenciones técnicas (Angular, React Native/Expo) con trazabilidad al código, guía fixes de alta precisión (/fix), genera el baseline de specs vivas de OpenSpec, y convierte tareas de Jira en changes de OpenSpec con gate de readiness (/from-jira).",
+      "description": "Extrae lógica de negocio y convenciones técnicas (Angular, React Native/Expo) con trazabilidad al código, guía fixes de alta precisión (/fix), genera el baseline de specs vivas de OpenSpec, y convierte tareas de Jira (incluido el contenido de sus adjuntos) en changes de OpenSpec con gate de readiness (/from-jira).",
       "version": "0.3.0",
       "category": "documentation"
     }

@@ -52,8 +52,14 @@ Hace cuatro cosas:
 **Qué hace:** convierte una tarea de Jira en un *change* de OpenSpec. Trae el issue por MCP, lo mapea a un *Change-Brief* y mide con un **gate de readiness** si la tarea está lista para SDD; si le falta info (sobre todo criterios de aceptación), **frena y pide aclaración** en vez de generar un spec pobre. Al confirmar, delega la generación al subagente `change-author`.
 **Cuándo usarlo:** para que el "prompt" de trabajo sea la tarea definida en Jira, no un texto suelto.
 **Produce:** un change en `openspec/changes/<change-id>/` (proposal/specs/design/tasks). Opcional (con confirmación): comenta y transiciona el issue en Jira (*write-back*).
-**Requisito:** CLI de OpenSpec + connector de Atlassian (Jira) autorizado (desde la config de connectors de claude.ai).
-**Cómo cuida la calidad:** el gate puntúa objetivo, alcance, criterios de aceptación, anclaje técnico y encaje con el dominio (umbral 85%); no genera con input turbio ni inventa criterios en silencio. Después del change, seguís con el flujo nativo de OpenSpec (`/opsx:apply` → `/opsx:archive`).
+**Requisito:** CLI de OpenSpec + connector de Atlassian (Jira) autorizado (desde la config de connectors de claude.ai). Para **leer el contenido de los adjuntos** del ticket (PDF de marca, mockups), además un token de API scoped (ver skill `jira-read`); si no está, un preflight ofrece configurarlo o seguir solo-texto (degradado).
+**Cómo cuida la calidad:** el gate puntúa objetivo, alcance, criterios de aceptación, anclaje técnico y encaje con el dominio (umbral 85%); no genera con input turbio ni inventa criterios en silencio. Cuando hay token, resuelve dimensiones también desde los adjuntos de diseño (el spec suele vivir en el PDF/mockup, no en el texto). Después del change, seguís con el flujo nativo de OpenSpec (`/opsx:apply` → `/opsx:archive`).
+
+### `jira-read` (skill) — leer una tarea de Jira con sus adjuntos
+**Qué hace:** trae una issue por key o URL `/browse/` **incluido el contenido de sus adjuntos** (imágenes, PDF, .md, .txt), no solo la metadata. Sirve standalone ("leé la tarea X") y es la capa que usa `/from-jira` para los adjuntos.
+**Cuándo usarlo:** para leer/entender una tarea que tiene diseño o specs adjuntos.
+**Requisito:** token de API scoped (`read:jira-work` + `read:attachment:jira`) guardado en env (`JIRA_EMAIL`/`JIRA_API_TOKEN`/`JIRA_SITE`) — setup en `skills/jira-read/references/jira-token-setup.md`. Gate duro: sin token válido, frena y guía el setup.
+**Por qué el token:** el MCP de Atlassian trae metadata del adjunto pero no el binario; el contenido real exige token propio pegándole al dominio del sitio.
 
 ---
 
@@ -105,6 +111,7 @@ Requiere el CLI de OpenSpec instalado y el proyecto inicializado (`openspec init
 | Skill | `intake-fix` | Entrevista de fix con gate de claridad (Fix-Brief). |
 | Skill | `generating-baseline-specs` | Procedimiento del baseline de specs de OpenSpec. |
 | Skill | `jira-intake` | Motor de `/from-jira`: fetch + mapeo + gate de readiness para SDD. |
+| Skill | `jira-read` | Lee una tarea de Jira por key/URL **incluido el contenido de sus adjuntos** (PDF/imágenes/.md); requiere token scoped. |
 
 > **Integración con OpenSpec** (`/baseline`, `/from-jira`): requieren el CLI de OpenSpec
 > (`@fission-ai/openspec`) instalado y el proyecto inicializado (`openspec/`). `/baseline` es
@@ -166,14 +173,16 @@ business-logic-toolkit/
 │   ├── extracting-conventions/
 │   ├── intake-fix/
 │   ├── generating-baseline-specs/
-│   └── jira-intake/
+│   ├── jira-intake/
+│   └── jira-read/
 └── evals/
     ├── README.md
     ├── business-logic/
     ├── conventions/
     ├── fix/
     ├── baseline/
-    └── from-jira/
+    ├── from-jira/
+    └── jira-read/
 ```
 
 ## Proyectos relacionados

@@ -27,12 +27,26 @@ sobre un issue turbio es un spec pobre.
 3. Ubicá `docs/business-logic.xml` si existe: da el contexto de dominio para puntuar
    "encaje con el dominio" y "anclaje técnico". Si no existe, se puede seguir, pero
    el anclaje se resuelve solo contra el código.
+4. **Preflight de token de adjuntos (gate INTELIGENTE):** corré el preflight de 2 niveles
+   de `jira-read` (`references/jira-token-setup.md`): presencia de `JIRA_EMAIL`/`JIRA_API_TOKEN`/
+   `JIRA_SITE` + validez (`curl` a `/rest/api/3/myself` → 200). Nunca imprimas el token.
+   - **Token OK** → vas a poder leer adjuntos (mejor calidad de readiness).
+   - **Token ausente/ inválido** → NO frenes el flujo entero. Avisá y ofrecé:
+     (a) **configurar ahora** (recomendado — mostrá el setup) o (b) **seguir solo-texto**
+     (degradado). En modo solo-texto, si el issue trae adjuntos de diseño que NO pudiste leer,
+     bajá la confianza de las dimensiones afectadas y decílo (no frenes a ciegas ni asumas lo que
+     el diseño contiene). A diferencia de `jira-read` (gate duro), acá el token es deseable, no obligatorio.
 
-## Fase 1: Fetch (MCP)
+## Fase 1: Fetch (MCP + adjuntos)
 
-- Resolvé el `cloudId` con `getAccessibleAtlassianResources`.
+- Aceptá key o URL `/browse/` (extraé la key de la URL si vino como link).
+- Resolvé el `cloudId` (usá `$JIRA_SITE` como cloudId, o `getAccessibleAtlassianResources` si falla).
 - Traé el issue con `getJiraIssue` (fields: summary, description, status, issuetype,
-  priority, labels, components, parent, comment; `responseContentFormat: markdown`).
+  priority, labels, components, parent, comment, **attachment**; `responseContentFormat: markdown`).
+- **Adjuntos:** si el preflight dio token OK, delegá en el flujo de `jira-read` para descargar y
+  **leer el contenido** de los adjuntos leíbles (PDF/imagen/.md/.txt) al scratchpad. Ese contenido
+  (mockups, PDF de marca, specs visuales) alimenta el mapeo y el gate de la Fase 2. Si estás en
+  modo solo-texto, saltá esto y anotá qué adjuntos quedaron sin leer.
 
 ## Fase 2: Mapeo + gate de readiness
 

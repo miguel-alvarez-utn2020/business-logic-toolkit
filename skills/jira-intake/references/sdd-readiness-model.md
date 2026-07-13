@@ -34,6 +34,20 @@ Total = **100**. Umbral **"listo para SDD" ≈ 85%**.
 Nota de pesos: los **Criterios de aceptación** pesan más (25) porque son el corazón del
 spec — cada CA se vuelve un scenario. Un issue sin CA claros produce specs pobres.
 
+## Los adjuntos también resuelven dimensiones
+
+Muchas tareas de UI llevan el spec en un **adjunto** (PDF de marca, mockup, Figma exportado),
+no en el texto. Si el preflight de token dio OK y `jira-read` leyó los adjuntos, esas dimensiones
+—especialmente **Criterios de aceptación**, **Alcance** y **Objetivo**— pueden resolverse **desde el
+diseño adjunto**, no solo desde la descripción. Un ticket con texto pobre pero un mockup claro puede
+cruzar el umbral legítimamente.
+
+Degradación (modo solo-texto, sin token):
+- Si el issue tiene adjuntos de diseño que NO se pudieron leer, **no asumas** su contenido y **no
+  frenes a ciegas**: bajá la confianza (parcial) de las dimensiones que probablemente vivan en ese
+  adjunto y **decílo** — recomendá configurar el token (`jira-read`) para leerlo, o pedí los CA por texto.
+- No inventes CA "porque seguro están en el PDF". Sin leerlo, esa dimensión queda parcial/0.
+
 ## Scoring
 
 Cada dimensión: **0 (sin resolver)**, **parcial (50% del peso)**, **resuelta (100%)**.

@@ -1,7 +1,7 @@
 {
   "name": "business-logic-toolkit",
   "version": "0.3.0",
-  "description": "Extrae y verifica la lógica de negocio de una app ya desarrollada (entidades, reglas, flujos, integraciones) con trazabilidad al código, extrae sus convenciones técnicas cruzadas con la guía oficial del framework, guía fixes de alta precisión con una entrevista estructurada (/fix), genera el baseline de specs vivas de OpenSpec desde la lógica extraída, y convierte tareas de Jira en changes de OpenSpec con un gate de readiness (/from-jira). Incluye 6 skills, 6 subagentes y 6 comandos.",
+  "description": "Extrae y verifica la lógica de negocio de una app ya desarrollada (entidades, reglas, flujos, integraciones) con trazabilidad al código, extrae sus convenciones técnicas cruzadas con la guía oficial del framework, guía fixes de alta precisión con una entrevista estructurada (/fix), genera el baseline de specs vivas de OpenSpec desde la lógica extraída, y convierte tareas de Jira en changes de OpenSpec con un gate de readiness (/from-jira), leyendo también el contenido de los adjuntos del ticket (jira-read). Incluye 7 skills, 6 subagentes y 6 comandos.",
   "author": {
     "name": "Miguel Alvarez",
     "email": "migueAlvarez48@gmail.com"
