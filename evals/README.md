@@ -33,12 +33,14 @@ evals/
 ├── fix/                 # escenarios de /fix (intake + fix-dev)
 ├── business-logic/      # extracción de lógica de negocio
 ├── conventions/         # extracción de convenciones
-└── baseline/            # generación del baseline de specs OpenSpec (muta el repo → cleanup)
+├── baseline/            # generación del baseline de specs OpenSpec (muta el repo → cleanup)
+└── from-jira/           # Jira → OpenSpec: readiness/gate (read-only) + change-author (smoke objetivo)
 ```
 
-> **Nota:** el eval de generación de `baseline/` **muta el repo** (escribe `openspec/specs/`), a
-> diferencia del resto que es read-only. Correrlo en worktree/rama descartable y limpiar al terminar.
-> La variante de discovery (Fase 1, solo el mapa de capabilities) sí es read-only.
+> **Nota:** los evals de generación que **mutan el repo** (escriben `openspec/`) son `baseline/`
+> y `from-jira/02-change-author-generacion`. Correrlos en worktree/rama descartable y limpiar al
+> terminar. El resto es read-only: `baseline/` en su variante de discovery, y `from-jira/01` y
+> `from-jira/03` (readiness gate) que solo razonan sobre el payload del issue.
 
 ## Formato de cada escenario
 Cada archivo `.md` define:
