@@ -2,10 +2,11 @@
 
 Plugin de [Claude Code](https://claude.com/claude-code) para **entender, documentar y mantener** apps ya desarrolladas — sin inventar nada: todo apunta al archivo y función donde vive.
 
-Hace tres cosas:
+Hace cuatro cosas:
 1. **Extrae la lógica de negocio** — *qué hace* la app (entidades, reglas, flujos).
 2. **Extrae las convenciones técnicas** — *cómo está construida* (arquitectura, estado, estilos…), cruzadas con la guía oficial del framework.
 3. **Guía arreglos de bugs** (`/fix`) con una entrevista estructurada, pensada para que hasta alguien no técnico (ej. un QA) pueda dirigir un fix con precisión.
+4. **Conecta con OpenSpec (SDD)** — genera el *baseline* de specs vivas desde la lógica extraída (`/baseline`) y convierte tareas de Jira en *changes* de OpenSpec con un gate de readiness (`/from-jira`).
 
 **Stacks soportados hoy:** Angular (+ NestJS), Angular frontend, y React Native / Expo. Para otro stack se agrega un "catálogo" de detección (ver más abajo).
 
@@ -40,6 +41,20 @@ Hace tres cosas:
 **Requisito:** conviene tener antes `docs/business-logic.xml` (le da contexto). Si no existe, `/fix` lo avisa.
 **Cómo cuida la calidad:** no aplica cambios "a ciegas" — si lo que reportás no se reproduce en el código, **frena** en vez de inventar un arreglo; y cita las reglas/convenciones **leyéndolas** del código, no de memoria.
 
+### `/baseline [--trace]`
+**Qué hace:** genera el *baseline* de specs vivas de OpenSpec a partir de `docs/business-logic.xml` — mapea flujos y reglas a *capabilities* y escribe una `spec.md` por capability, validada con el CLI de OpenSpec.
+**Cuándo usarlo:** en una app existente, después de `/business-logic`, para sembrar `openspec/specs/` y empezar a trabajar spec-driven (cada cambio futuro es un *delta* contra esa base).
+**Produce:** `openspec/specs/<capability>/spec.md` (una por capability).
+**Requisito:** CLI de OpenSpec (`@fission-ai/openspec`) instalado + proyecto inicializado (`openspec init`), y `docs/business-logic.xml` ya verificado.
+**Cómo trabaja:** *descubrimiento* (propone el mapa de capabilities y **para y espera tu OK**) → *generación* → *validación* (`openspec validate`). Con `--trace` agrega la referencia a las reglas (BR) dentro de cada spec.
+
+### `/from-jira <ISSUE-KEY> [--no-writeback]`
+**Qué hace:** convierte una tarea de Jira en un *change* de OpenSpec. Trae el issue por MCP, lo mapea a un *Change-Brief* y mide con un **gate de readiness** si la tarea está lista para SDD; si le falta info (sobre todo criterios de aceptación), **frena y pide aclaración** en vez de generar un spec pobre. Al confirmar, delega la generación al subagente `change-author`.
+**Cuándo usarlo:** para que el "prompt" de trabajo sea la tarea definida en Jira, no un texto suelto.
+**Produce:** un change en `openspec/changes/<change-id>/` (proposal/specs/design/tasks). Opcional (con confirmación): comenta y transiciona el issue en Jira (*write-back*).
+**Requisito:** CLI de OpenSpec + connector de Atlassian (Jira) autorizado (desde la config de connectors de claude.ai).
+**Cómo cuida la calidad:** el gate puntúa objetivo, alcance, criterios de aceptación, anclaje técnico y encaje con el dominio (umbral 85%); no genera con input turbio ni inventa criterios en silencio. Después del change, seguís con el flujo nativo de OpenSpec (`/opsx:apply` → `/opsx:archive`).
+
 ---
 
 ## 🔷 Flujo recomendado (para un proyecto nuevo)
@@ -52,6 +67,19 @@ Hace tres cosas:
 ```
 
 Los pasos 1 y 2 se corren **una vez** por proyecto (quedan en `docs/`). Después `/fix` los usa como contexto.
+
+### Extensión con OpenSpec (spec-driven)
+
+Si además vas a trabajar con OpenSpec, sobre los pasos 1-2:
+
+```
+4. /baseline .            → sembrar specs vivas desde business-logic.xml   (openspec/specs/)
+5. /from-jira <ISSUE-KEY> → convertir una tarea de Jira en un change de OpenSpec
+   → seguís con /opsx:apply y /opsx:archive (flujo nativo de OpenSpec)
+```
+
+Requiere el CLI de OpenSpec instalado y el proyecto inicializado (`openspec init`).
+`/from-jira` además necesita el connector de Atlassian (Jira) autorizado.
 
 ---
 
